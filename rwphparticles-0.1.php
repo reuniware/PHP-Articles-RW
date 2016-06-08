@@ -1,8 +1,8 @@
 <?php
-define("MYSQL_SERVER", "replaceme");
-define("MYSQL_USER", "replaceme");
-define("MYSQL_PASSWORD", "replaceme");
-define("MYSQL_DB", "articlesdb");
+define("MYSQL_SERVER", "mysqlserverhostname");
+define("MYSQL_USER", "username");
+define("MYSQL_PASSWORD", "password");
+define("MYSQL_DB", "dbtocreate");
 define("MAIN_TABLE_NAME", "articles");
 define("LOG_IP", true);
 define("DELETE_ALL_LOGGED_IP", false);
@@ -10,7 +10,7 @@ define("CREATE_DB_IF_NOT_EXISTS", true);
 define("CREATE_TABLES_IF_NOT_EXIST", true);
 define("TITLE","RW-PHPArticles v1.0");
 define("TITLE2","Contenu");
-define("SUBTITLE","Page des news et articles");
+define("SUBTITLE","Page des news et articles NTIC");
 
 
 // if no admin account in db, create admin account with defined password (after hashing it)
@@ -61,11 +61,36 @@ if (isset($_POST['login']) && isset($_POST['password'])){
 	if ($r->num_rows > 0){
 		echo 'Logged OK.';
 		$allowed = true;
-		$db->close();
 	} else {
 		$allowed = false;
 	}
+	$db->close();
 }
+
+if ($allowed == true){
+	echo 'allowed is true ; adminfunction';
+	if (isset($_POST['adminfunction'])){
+		$adminfunction = $_POST['adminfunction'];
+		echo 'adminfunction = ' . $adminfunction;
+		$array = explode("?delete_article&id=", $adminfunction);
+		if (!is_null($array) && count($array)>0){
+			$id = $array[1];
+
+			$db = new mysqli(MYSQL_SERVER, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB);
+			if ($db->connect_errno) {
+				echo 'error';
+			    exit;
+			}
+			
+			$str = "delete from " . MAIN_TABLE_NAME . " where id = " . $id;
+			echo 'request=[' . $str . ']';
+
+			$r = mysqli_query($db, "delete from " . MAIN_TABLE_NAME . " where id = " . $id);
+			$db->close();
+		}
+	}
+}
+
 
 
 // supprimer toutes les données de la table annuaire si paramètre get delete_data = true
@@ -298,7 +323,7 @@ if ($allowed == true){
 	echo ' <input type="hidden" type="text" name="login" value="' . $_POST['login'] . '">';
 	echo ' <input type="hidden" type="text" name="password" value="' . $_POST['password'] . '">';
 	echo '<br/>';
-	echo '  <input type="submit" value="Submit">';
+	echo '  <input id="btnsubmitarticle" type="submit" value="Submit">';
 	echo '</form></center>'; 
 	echo '<br/><br/>';
 
@@ -306,7 +331,7 @@ if ($allowed == true){
 
 if ($allowed == false){
 
-	echo '<center><b>Authentication :</b><br/><br/>';
+	echo '<center><b>Authentification :</b><br/><br/>';
 	echo "<form action='" . $_POST['current_file_name'] . "' method='post'>";
 	echo ' Login: <input type="text" id="login" name="login" value="" size=16><br/>';
 	echo ' Password: <input type="text" id="password" name="password" value="" size=16>';
@@ -353,5 +378,44 @@ if ($allowed == true){
 }
 ?>
 
+
+<script>
+
+$( document ).ready(function() {
+	$( "a" ).click(function( event ) {
+	  event.preventDefault();
+
+		var href = $(this).attr('href');
+		console.log(href);
+		
+		var login="<?php echo $_POST["login"] ?>";
+		var password="<?php echo $_POST["password"] ?>";
+		
+		console.log(login);
+		console.log(password);
+		
+		$.post
+		( 	"",
+			{ adminfunction : href,
+			  login : login,
+			  password : password
+			},
+			function(data) 
+			{
+				console.log( data);
+				$("#titre").val("");
+				$("#contenu").val("");
+				$("#btnsubmitarticle" ).click();
+			}
+		);
+
+	});
+});
+
+
+
+</script>
+
 </body>
 </html>
+
