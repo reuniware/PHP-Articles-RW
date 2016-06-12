@@ -1,5 +1,5 @@
 <?php
-// work in progress : proper handling of the session (remove all references to POST variables for authentication
+// work in progress : proper handling of the session (remove all references to POST variables for authentication)
 // this seems to work (creating session and allowing rights for creating and deleting articles if admin).
 // more tests to be done, and also making the hashed password go only one time from client to server
 
