@@ -1,5 +1,6 @@
 <?php
 // Improved and clarified management of credentials.
+// Warning : still some advanced functions with no need for credentials (ip log delete for example).
 
 session_start();
 
