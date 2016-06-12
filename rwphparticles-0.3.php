@@ -1,6 +1,7 @@
 <?php
 // Improved and clarified management of credentials.
 // Warning : still some advanced functions with no need for credentials (ip log delete for example).
+// another function that does not need credentials : deleting all data from the articles table ! 
 
 session_start();
 
