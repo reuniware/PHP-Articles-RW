@@ -1,4 +1,11 @@
 <?php
+
+/*
+RW-PHPArticles - A free content management system (CMS).
+Still in alpha development and still contains some important functions that are not protected so you may comment the code 
+that is specific to these functions (delete ip and delete articles by issuing a GET request for example).
+*/
+
 session_start();
 
 define("DEBUG",false); // enable logging with PHP echo (printed at the top of the page) 
